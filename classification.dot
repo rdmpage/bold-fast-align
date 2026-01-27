@@ -1,0 +1,133 @@
+digraph {
+rankdir=LR;
+
+/* internal nodes missing from mac */
+node [style=filled, color=lightgray] Insecta;
+node [style=filled, color=lightgray] Arthropoda;
+node [style=filled, color=lightgray] Chordata;
+node [style=filled, color=lightgray] Reptilia;
+node [style=filled, color=lightgray] Animalia;
+
+/* nodes replaced with BOLD names */
+node [style=filled, color=orange] Leptocardii;
+node [style=filled, color=orange] Ascidiacea;
+node [style=filled, color=orange] Cephalaspidomorphi;
+node [style=filled, color=orange] Elasmobranchii;
+node [style=filled, color=orange] Squamata;
+
+
+/* default node style */
+node [style=solid, color=black];
+
+Animalia -> Porifera;
+Animalia -> Cnidaria;
+Animalia -> Ctenophora;
+Animalia -> Acanthocephala;
+Animalia -> Brachiopoda;
+Animalia -> Bryozoa;
+Animalia -> Gastrotricha;
+Animalia -> Platyhelminthes;
+Animalia -> Annelida;
+Animalia -> Sipuncula;
+Animalia -> Mollusca;
+Animalia -> Nemertea;
+Animalia -> Chaetognatha;
+Animalia -> Rotifera;
+Animalia -> Kinorhyncha;
+Animalia -> Nematomorpha;
+Animalia -> Nematoda;
+Animalia -> Tardigrada;
+Animalia -> Onychophora;
+
+
+/* missing */
+Animalia -> Arthropoda;
+
+
+Arthropoda -> Arachnida;
+Arthropoda -> Pycnogonida;
+Arthropoda -> Chilopoda;
+Arthropoda -> Diplopoda;
+Arthropoda -> Malacostraca;
+Arthropoda -> Ostracoda;
+Arthropoda -> Collembola;
+
+
+/* missing */
+Arthropoda -> Insecta;
+
+
+
+Insecta -> Archaeognatha;
+Insecta -> Blattodea;
+Insecta -> Diptera;
+Insecta -> Coleoptera;
+Insecta -> Dermaptera;
+Insecta -> Embioptera;
+Insecta -> Ephemeroptera;
+Insecta -> Hemiptera;
+Insecta -> Hymenoptera;
+Insecta -> Lepidoptera;
+Insecta -> Mantodea;
+Insecta -> Mecoptera;
+Insecta -> Megaloptera;
+Insecta -> Neuroptera;
+Insecta -> Odonata;
+Insecta -> Orthoptera;
+Insecta -> Phasmatodea;
+Insecta -> Plecoptera;
+Insecta -> Psocodea;
+Insecta -> Raphidioptera;
+Insecta -> Siphonaptera;
+Insecta -> Strepsiptera;
+Insecta -> Thysanoptera;
+Insecta -> Trichoptera;
+
+Hymenoptera -> Apidae;
+Hymenoptera -> Formicidae;
+Hymenoptera -> Vespidae;
+
+
+Diptera -> Culicidae;
+Diptera -> Drosophilidae;
+
+Lepidoptera -> Geometridae;
+Lepidoptera -> Lycaenidae;
+Lepidoptera -> Noctuidae;
+Lepidoptera -> Nymphalidae;
+Lepidoptera -> Papilionidae;
+Lepidoptera -> Pieridae;
+Lepidoptera -> Pyralidae;
+Lepidoptera -> Saturniidae;
+Lepidoptera -> Sphingidae;
+Lepidoptera -> Uraniidae;
+
+
+Animalia -> Echinodermata;
+Animalia -> Hemichordata;
+
+
+/* missing */
+Animalia -> Chordata;
+
+Chordata -> Leptocardii; /* Cephalochordata */
+Chordata -> Ascidiacea; /* Tunicata */
+Chordata -> Cephalaspidomorphi; /* Cyclostomata */
+
+Chordata -> Elasmobranchii; /* Chondrichthyes */
+Chordata -> Actinopterygii;
+Chordata -> Sarcopterygii;
+Chordata -> Amphibia;
+
+
+/*  missing */
+Chordata -> Reptilia;
+
+Reptilia -> Squamata; /* Lepidosauria */
+Reptilia -> Testudines;
+Reptilia -> Crocodylia;
+
+Chordata -> Aves;
+Chordata -> Mammalia;
+
+}
