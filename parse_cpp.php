@@ -5,7 +5,7 @@
 ini_set('memory_limit', '-1');
 
 // Path to C++ alignment binary
-define('ALIGN_BINARY', './align');
+define('ALIGN_BINARY', './src/align');
 
 //----------------------------------------------------------------------------------------
 // http://stackoverflow.com/a/5996888/9684
@@ -71,14 +71,16 @@ function cpp_align($seq1, $seq2)
 }
 
 //----------------------------------------------------------------------------------------
+// Step 1. Get list of reference sequences for major taxonomic groups
 
-$reference_family = [];
-$reference_order  = [];
-$reference_class  = [];
-$reference_phylum = [];
-$reference_acc    = [];
-$reference_seq    = [];
-$reference_len    = [];
+$reference_family  = [];
+$reference_order   = [];
+$reference_class   = [];
+$reference_phylum  = [];
+$reference_kingdom = [];
+$reference_acc     = [];
+$reference_seq     = [];
+$reference_len     = [];
 
 $row_count = 0;
 
@@ -150,6 +152,8 @@ while (!feof($file_handle))
 	
 	$row_count++;
 }	
+
+// Step 2. Read BOLD TSV file and align each sequence
 
 $headings = array();
 
@@ -227,6 +231,13 @@ while (!feof($file_handle))
 						$ref_acc = $reference_phylum[$data->phylum];
 					}
 				}
+				elseif (isset($data->kingdom))
+				{
+					if (isset($reference_kingdom[$data->kingdom]))
+					{
+						$ref_acc = $reference_kingdom[$data->kingdom];
+					}
+				}				
 				
 				$seq1 = $reference_seq[$ref_acc];
 				$seq1 = swa_clean_sequence($seq1);
@@ -271,7 +282,7 @@ while (!feof($file_handle))
 	$row_count++;
 	
 	// Process fewer records for testing
-	if ($row_count > 1000)
+	if ($row_count > 10)
 	{
 		break;
 	}

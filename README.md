@@ -146,6 +146,13 @@ The tree made it clear that `macse.csv` lacked reference sequences for a number 
 
 Hence we should be able to provide a reference sequence for any animal COI in BOLD.
 
+## Alignment
+
+The idea is to use Smith-Waterman Alignment to align a barcode with the reference sequence. The goal is to locate the start and the end of the barcode w.r.t. the reference sequence. Initially I used PHP for this, but then got Claude to port that code to C++. This code is in `src`.
+
+## Data
+
+The data is expected to be a TSV file from a BOLD data package. The script `
 
 ## Reading
 
