@@ -4,6 +4,8 @@
 
 ini_set('memory_limit', '-1');
 
+require_once (dirname(__FILE__) . '/pg.php');
+
 // Path to C++ alignment binary
 define('ALIGN_BINARY', './src/align');
 
@@ -153,6 +155,7 @@ while (!feof($file_handle))
 	$row_count++;
 }	
 
+//----------------------------------------------------------------------------------------
 // Step 2. Read BOLD TSV file and align each sequence
 
 $headings = array();
@@ -169,6 +172,16 @@ if (!file_exists($filename)) {
 	echo "Please ensure the BOLD data file is in the correct location.\n";
 	exit(1);
 }
+
+$batchsize  =      10; 
+$batchsize  =    1000;  // 1K
+//$batchsize  =   10000; // 10K
+//$batchsize  =  100000; // 100K
+
+$batch = array();
+$row_startTime = microtime(true);
+
+$mode = 'sql';
 
 $file_handle = fopen($filename, "r");
 while (!feof($file_handle)) 
@@ -200,6 +213,14 @@ while (!feof($file_handle))
 			// get spans of alignment w.r.t. reference sequence
 			if (isset($data->nuc) && $data->marker_code == 'COI-5P')
 			{
+				
+				if (!$go && $skip != '')
+				{
+					$go = ($data->processid == $skip);
+				}
+			
+				echo $data->processid . "\n";
+			
 				// Default reference sequence is Drosophila NC_046603
 				$ref_acc = 'NC_046603';
 				
@@ -269,8 +290,37 @@ while (!feof($file_handle))
 					$spans[0][1] = $alignment['seq1'][1];
 					$spans[1][1] = $sequence_length - $suffix_length + $alignment['seq2'][1];
 					
-					echo $data->processid . " " . $ref_acc . " " . $reference_len[$ref_acc] 
+					if ($mode == 'sql')
+					{
+						$value = new stdclass;
+						$value->acc = $ref_acc;
+						$value->len = $reference_len[$ref_acc];
+						$value->spans = $spans;
+						$sql = "UPDATE boldvector SET alignment='" . json_encode($value) . "' WHERE processid='" . $data->processid . "';";
+												
+						$batch[] = $sql;
+						
+						if (count($batch) > $batchsize)
+						{
+							echo "Uploading " . count($batch) . " rows to psql\n";
+							$startTime = microtime(true);
+	
+							$batch_sql = join("", $batch)			;
+							$result = pg_query($db, $batch_sql);
+							
+							$endTime = microtime(true);
+							$executionTime = $endTime - $startTime;
+							$formattedTime = number_format($executionTime, 3, '.', '');
+							echo "Execution time: " . $formattedTime . " seconds\n\n";
+							
+							$batch = array();
+						}
+					}
+					else
+					{
+						echo $data->processid . " " . $ref_acc . " " . $reference_len[$ref_acc] 
 					     . " [" . join(",", $spans[0]) . "],[" . join(",", $spans[1]) . "]\n";
+					}
 				}
 				catch (Exception $e) {
 					echo "Error aligning {$data->processid}: " . $e->getMessage() . "\n";
@@ -282,12 +332,27 @@ while (!feof($file_handle))
 	$row_count++;
 	
 	// Process fewer records for testing
-	if ($row_count > 10)
+	if ($row_count > 100000)
 	{
 		break;
 	}
 }	
 
-echo "\nProcessed $row_count records\n";
+// left over?
+if ($mode == 'sql' && count($batch) > 0)
+{
+	echo "Uploading " . count($batch) . " rows to psql\n";
+	$startTime = microtime(true);
+
+	$batch_sql = join("", $batch)			;
+	$result = pg_query($db, $batch_sql);
+	
+	$endTime = microtime(true);
+	$executionTime = $endTime - $startTime;
+	$formattedTime = number_format($executionTime, 3, '.', '');
+	echo "Execution time: " . $formattedTime . " seconds\n\n";
+	
+	$batch = array();
+}
 
 ?>

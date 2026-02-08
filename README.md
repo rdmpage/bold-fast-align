@@ -2,6 +2,10 @@
 
 Align all COI DNA barcodes to reference sequences. Goal is not a full multiple sequence alignment, but rather getting the “span” of a barcode relative to a reference sequence. This can be used to visualise the coverage of the COI gene in a set of barcodes.
 
+## Cases to check
+
+- GBSP14138-19 long sequence short alignment
+
 ## Reference sequences
 
 The reference sequences come from the [MACSE Barcode Alignments](https://doi.org/10.5281/zenodo.14185813) described in [Accurate alignment of (meta)barcoding data sets using MACSE](https://doi.org/10.5281/zenodo.14185826). Note also that the reference sequence for the COI sequence for *Solenopsis geminata* [NC_014669.1](https://www.ncbi.nlm.nih.gov/nuccore/NC_014669.1?report=fasta&from=1&to=1528) is not available from the MACSE website and has been added here. The sequences, accession numbers, and taxonomic group are all in the file `macse.csv`.
